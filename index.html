@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medidas Operativas y Conciliación Bilateral — Sanesca</title>
+  <meta name="description" content="Portal interactivo del Marco de Conciliación y Corresponsabilidad Bilateral de Sanesca. Resiliencia energética, concurrencia de maquinaria y cadena crítica.">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Mermaid.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>
+
+  <!-- QRCode.js CDN (Rock-solid standalone) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Alpine.js Core (defer) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
+
+  <!-- Lógica App -->
+  <script src="js/app.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col" x-data="medidasApp">
+
+  <!-- ========================================================================= -->
+  <!-- ZONA 0: HEADER COMPARTIDO (IDÉNTICO A SANESCA-DASHBOARD CON ENLACE CRUZADO) -->
+  <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
+  <!-- ZONA 0: HEADER Y NAVEGACIÓN UNIFICADA (STICKY TOP SIN ENTRECORTAR) -->
+  <!-- ========================================================================= -->
+  <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 sm:px-6 flex items-center justify-between border-b border-slate-800/60">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo-sanesca.png" alt="Sanesca" class="h-8 w-auto object-contain" onerror="this.style.display='none'">
+        <div>
+          <h1 class="text-white font-extrabold text-base sm:text-lg tracking-tight flex items-center gap-2">
+            <span>🏭 Medidas Operativas</span>
+            <span class="hidden sm:inline-block text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">v2.0 DocSemVer</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden md:block">Marco de Conciliación, Resiliencia Energética y Cadena Crítica</p>
+        </div>
+      </div>
+      
+      <!-- Navegación Cruzada hacia sanesca-dashboard y Descarga PDF -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="https://cazx008.github.io/sanesca-dashboard/" target="_blank"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 transition shadow-sm">
+          <span>⚡ Monitoreo en Vivo</span>
+          <span class="text-xs">↗</span>
+        </a>
+        <a href="assets/Documento_Marco_Conciliacion_Sanesca.pdf" download="Documento_Marco_Conciliacion_Sanesca.pdf"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm"
+           title="Descargar documento marco oficial en formato PDF">
+          <span>📄 Descargar PDF</span>
+          <span class="text-xs font-bold">⤓</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sub-barra de Navegación Rápida a Secciones -->
+    <div class="max-w-7xl mx-auto px-4 py-1.5 overflow-x-auto custom-scrollbar flex items-center gap-1.5 text-xs whitespace-nowrap">
+      <a href="#principios" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">🎯 Principios</a>
+      <a href="#estadistica" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">📊 Diagnóstico & Semáforo</a>
+      <a href="#concurrencia" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">⚙️ Concurrencia de Máquinas</a>
+      <a href="#cadena" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">🔗 Cadena Crítica & Flujo</a>
+      <a href="#pacto" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">🤝 Corresponsabilidad</a>
+      <a href="#formularios" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">📱 Hub de Formularios</a>
+      <a href="#glosario" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">📖 Glosario</a>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- ZONA 1: HERO CONTEXTUAL & INDICADOR DINÁMICO DEL DÍA -->
+  <!-- ========================================================================= -->
+  <section class="bg-gradient-to-b from-slate-900 via-slate-900/60 to-slate-950 border-b border-slate-800 px-4 py-6 sm:py-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        
+        <!-- Tarjeta Principal del Día -->
+        <div class="lg:col-span-7 space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 border border-slate-700 text-slate-300">
+            <span class="w-2 h-2 rounded-full animate-ping"
+                  :class="currentStatusFranja === 'dorada' ? 'bg-emerald-400' : (currentStatusFranja === 'riesgo' ? 'bg-rose-500' : 'bg-blue-400')"></span>
+            <span x-text="currentTimeStr || 'Cargando fecha y hora...'"></span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Pacto Operativo de Planta Sanesca
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Estrategia de corresponsabilidad técnica y laboral ante la contingencia eléctrica. Diseñada para proteger las <strong class="text-emerald-400 font-semibold">5 horas de luz de la Franja Dorada</strong>, asegurar la entrega de las tiendas completas y garantizar los bonos semanales de producción.
+          </p>
+
+          <!-- Badges de parámetros del Generador -->
+          <div class="flex flex-wrap items-center gap-2 pt-2 text-xs">
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
+              ⚡ Generador Iveco Aifo (28 kW PRP / 92A)
+            </span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
+              ⛽ Consumo: ~6.2 L/h (70% carga)
+            </span>
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
+              📊 18 Semanas (62 cortes consolidados)
+            </span>
+          </div>
+        </div>
+
+        <!-- Widget del Semáforo de Hoy -->
+        <div class="lg:col-span-5">
+          <div class="bg-slate-900 rounded-2xl p-5 border border-slate-700/80 shadow-xl relative overflow-hidden">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Pronóstico de Hoy</span>
+              <span class="text-xs font-mono px-2.5 py-0.5 rounded-full font-bold"
+                    :class="todayData && todayData.probabilidad_semanal >= 70 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : (todayData && todayData.probabilidad_semanal >= 50 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30')"
+                    x-text="todayData ? todayData.riesgo_badge : 'Calculando...'">
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 text-center">
+              <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800">
+                <span class="text-[11px] text-slate-400 block mb-1">Probabilidad de Corte</span>
+                <span class="text-2xl sm:text-3xl font-black text-white font-mono" x-text="todayData ? (todayData.probabilidad_semanal + '%') : '—'"></span>
+                <span class="text-[10px] text-slate-500 block mt-1" x-text="todayData ? (todayData.cortes + ' eventos en 18 sem') : ''"></span>
+              </div>
+              <div class="bg-slate-950/60 rounded-xl p-3 border border-slate-800">
+                <span class="text-[11px] text-slate-400 block mb-1">Ventana Típica</span>
+                <span class="text-xs sm:text-sm font-bold text-amber-300 font-mono block mt-1" x-text="todayData ? todayData.ventana_promedio : '—'"></span>
+                <span class="text-[10px] text-slate-500 block mt-1" x-text="todayData ? ('Duración media: ' + todayData.duracion_media) : ''"></span>
+              </div>
+            </div>
+
+            <!-- Estado de la Franja Actual -->
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+              <span class="text-slate-400">Franja actual:</span>
+              <template x-if="currentStatusFranja === 'dorada'">
+                <span class="font-bold text-emerald-400 flex items-center gap-1">
+                  🟢 Franja Dorada (100% Red Comercial)
+                </span>
+              </template>
+              <template x-if="currentStatusFranja === 'riesgo'">
+                <span class="font-bold text-rose-400 flex items-center gap-1">
+                  🔴 Ventana de Riesgo (Modo Planta)
+                </span>
+              </template>
+              <template x-if="currentStatusFranja === 'recuperacion'">
+                <span class="font-bold text-blue-400 flex items-center gap-1">
+                  🔵 Retorno y Cierre de Jornada
+                </span>
+              </template>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CONTENIDO PRINCIPAL (7 MÓDULOS) -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8 space-y-16">
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 1: DECLARACIÓN DE PROPÓSITO Y PRINCIPIOS DE CONVIVENCIA -->
+    <!-- ======================================================================= -->
+    <section id="principios" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-emerald-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">1. Principios de Convivencia y Propósito</h3>
+        <p class="text-slate-400 text-sm">Este marco no constituye un reglamento punitivo ni una imposición jerárquica: es una herramienta de claridad y planificación compartida.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <template x-for="p in data?.principios || []" :key="p.id">
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-2xl" x-text="p.icono"></span>
+                <div>
+                  <h4 class="font-bold text-white text-sm" x-text="p.titulo"></h4>
+                  <span class="text-[11px] text-emerald-400 font-semibold" x-text="p.subtitulo"></span>
+                </div>
+              </div>
+              <p class="text-slate-300 text-xs leading-relaxed" x-text="p.contenido"></p>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 2: DIAGNÓSTICO TÉCNICO, SEMÁFORO Y FRANJA DORADA -->
+    <!-- ======================================================================= -->
+    <section id="estadistica" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-amber-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">2. Diagnóstico del Panorama Energético</h3>
+        <p class="text-slate-400 text-sm">Comportamiento consolidado sobre 62 eventos de corte en 18 semanas continuas de registro.</p>
+      </div>
+
+      <!-- Semáforo Visual Horario (Gantt Interactivo) -->
+      <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <h4 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+            <span>⏱️ Semáforo Horario Diario (Lunes a Jueves)</span>
+          </h4>
+          <span class="text-xs text-slate-400 font-mono">Horario Formal: 07:00 AM – 04:00 PM</span>
+        </div>
+
+        <!-- Barra Visual Gantt -->
+        <div class="space-y-2">
+          <div class="h-10 w-full rounded-xl overflow-hidden flex text-[11px] font-bold shadow-inner">
+            <div class="w-[38%] bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center transition cursor-pointer px-2 text-center" title="06:00 AM – 11:00 AM: 100% Confiabilidad de Red Comercial">
+              🟢 FRANJA DORADA (06:00 – 11:00 AM)
+            </div>
+            <div class="w-[44%] bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center transition cursor-pointer px-2 text-center" title="11:00 AM – 04:30 PM: 82.3% Probabilidad de Corte">
+              🔴 MODO PLANTA (11:00 – 04:30 PM)
+            </div>
+            <div class="w-[18%] bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition cursor-pointer px-2 text-center" title="04:30 PM – 06:00 PM: Retorno y Recuperación de Red">
+              🔵 RETORNO
+            </div>
+          </div>
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono px-1">
+            <span>06:00 AM (Arranque)</span>
+            <span>11:00 AM (Corte típico)</span>
+            <span>04:30 PM (Restauración)</span>
+            <span>06:00 PM</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs">
+          <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800/80">
+            <strong class="text-emerald-400 block mb-1">✨ Franja Dorada (06:00–11:00 AM)</strong>
+            <p class="text-slate-300">100% de los cortes han ocurrido después de las 11:00 AM. La mañana tiene máxima estabilidad para máquinas CNC pesadas.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800/80">
+            <strong class="text-rose-400 block mb-1">⚠️ Concentración en Días Hábiles</strong>
+            <p class="text-slate-300">El <strong>82.3% de los cortes</strong> ocurren de Lunes a Jueves, demandando soporte de generador en las tardes de taller.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3 rounded-lg border border-slate-800/80">
+            <strong class="text-amber-400 block mb-1">⏱️ Duración Media: 4h 23m</strong>
+            <p class="text-slate-300">Cada evento consume en promedio 4.4 horas de planta diésel (~27.2 L de combustible por jornada de contingencia).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla Estadística y Gráfico Chart.js -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Tabla de Datos -->
+        <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-5 border border-slate-800 overflow-x-auto custom-scrollbar">
+          <h4 class="font-bold text-white text-sm mb-3">Distribución de Cortes por Día de la Semana</h4>
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 font-mono">
+                <th class="pb-2">Día</th>
+                <th class="pb-2 text-center">N° Cortes</th>
+                <th class="pb-2 text-center">% Total</th>
+                <th class="pb-2 text-center">Prob.</th>
+                <th class="pb-2">Ventana Promedio</th>
+                <th class="pb-2 text-right">Duración</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60 font-mono">
+              <template x-for="d in data?.estadistica_semanal || []" :key="d.dia">
+                <tr class="hover:bg-slate-800/40 transition" :class="d.dia_num === todayDayIndex ? 'bg-slate-800/60 font-bold' : ''">
+                  <td class="py-2.5 text-slate-200 flex items-center gap-1.5">
+                    <span x-text="d.dia"></span>
+                    <span x-show="d.dia_num === todayDayIndex" class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1 py-0.2 rounded font-sans font-semibold">HOY</span>
+                  </td>
+                  <td class="py-2.5 text-center text-slate-300" x-text="d.cortes"></td>
+                  <td class="py-2.5 text-center text-slate-400" x-text="d.pct_total + '%'"></td>
+                  <td class="py-2.5 text-center">
+                    <span class="px-2 py-0.5 rounded text-[11px] font-bold"
+                          :class="d.probabilidad_semanal >= 70 ? 'bg-rose-500/20 text-rose-300' : (d.probabilidad_semanal >= 50 ? 'bg-amber-500/20 text-amber-300' : (d.probabilidad_semanal > 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700 text-slate-400'))"
+                          x-text="d.probabilidad_semanal + '%'">
+                    </span>
+                  </td>
+                  <td class="py-2.5 text-slate-300 text-[11px]" x-text="d.ventana_promedio"></td>
+                  <td class="py-2.5 text-right text-slate-200" x-text="d.duracion_media"></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Gráfico Chart.js -->
+        <div class="lg:col-span-5 bg-slate-900 rounded-2xl p-5 border border-slate-800 flex flex-col justify-between">
+          <h4 class="font-bold text-white text-sm mb-2">Probabilidad Semanal (%)</h4>
+          <div class="h-64 w-full relative">
+            <canvas id="chartProbabilidadCortes"></canvas>
+          </div>
+          <p class="text-[11px] text-slate-400 text-center mt-2">Los miércoles y lunes presentan la mayor vulnerabilidad (83% y 72%).</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 3: MATRIZ Y SIMULADOR DE CONCURRENCIA DE MAQUINARIA -->
+    <!-- ======================================================================= -->
+    <section id="concurrencia" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-blue-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">3. Matriz Técnica de Concurrencia de Maquinaria</h3>
+        <p class="text-slate-400 text-sm">Reglas de balance eléctrico bajo el Generador Iveco Aifo (28 kW PRP / 92A) para evitar sobrecargas y caídas de planta.</p>
+      </div>
+
+      <!-- Simulador de Concurrencia Interactivo -->
+      <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-lg space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h4 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
+            <span>⚡ Simulador Rápido de Concurrencia (¿Puedo encender estas 2 máquinas?)</span>
+          </h4>
+          <span class="text-xs text-slate-400 hidden sm:inline">Generador 28 kW</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs text-slate-400 font-semibold mb-1.5">Máquina A:</label>
+            <select x-model="selectedMachine1" class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+              <template x-for="m in data?.maquinaria || []" :key="'m1_'+m.id">
+                <option :value="m.id" x-text="m.icono + ' ' + m.nombre"></option>
+              </template>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 font-semibold mb-1.5">Máquina B:</label>
+            <select x-model="selectedMachine2" class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-blue-500">
+              <template x-for="m in data?.maquinaria || []" :key="'m2_'+m.id">
+                <option :value="m.id" x-text="m.icono + ' ' + m.nombre"></option>
+              </template>
+            </select>
+          </div>
+        </div>
+
+        <!-- Resultado Dinámico del Simulador -->
+        <div class="p-4 rounded-xl border transition-all"
+             :class="concurrencyResult.compatible ? (concurrencyResult.badge === 'misma_maquina' ? 'bg-blue-500/10 border-blue-500/30' : 'bg-emerald-500/10 border-emerald-500/30') : 'bg-rose-500/10 border-rose-500/30'">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl" x-text="concurrencyResult.compatible ? (concurrencyResult.badge === 'misma_maquina' ? 'ℹ️' : '✅') : '⛔'"></span>
+            <div>
+              <h5 class="font-bold text-sm"
+                  :class="concurrencyResult.compatible ? (concurrencyResult.badge === 'misma_maquina' ? 'text-blue-300' : 'text-emerald-300') : 'text-rose-300'"
+                  x-text="concurrencyResult.title"></h5>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed" x-text="concurrencyResult.message"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Catálogo de Tarjetas de las 7 Estaciones -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <template x-for="m in data?.maquinaria || []" :key="m.id">
+          <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl" x-text="m.icono"></span>
+                  <h4 class="font-bold text-white text-sm" x-text="m.nombre"></h4>
+                </div>
+              </div>
+              <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mb-2"
+                    :class="m.badge_type === 'restringido' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : (m.badge_type === 'condicionado' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : (m.badge_type === 'parcial' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'))"
+                    x-text="m.badge_label"></span>
+              <p class="text-xs text-slate-300 leading-relaxed mb-3" x-text="m.regla_completa"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-3 text-[11px] text-slate-400 space-y-1">
+              <div class="flex justify-between">
+                <span>Operador:</span>
+                <strong class="text-slate-200" x-text="m.operador"></strong>
+              </div>
+              <div class="flex justify-between">
+                <span>Área:</span>
+                <span class="text-slate-300 font-mono text-[10px]" x-text="m.area"></span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 4: CADENA CRÍTICA Y FLUJO DE PRODUCCIÓN (AMBOS DIAGRAMAS MERMAID) -->
+    <!-- ======================================================================= -->
+    <section id="cadena" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-purple-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">4. Cadena Crítica y Flujo de Dependencias</h3>
+        <p class="text-slate-400 text-sm">Secuencia de compromisos sucesivos para proteger la salida a tiempo de las tiendas completas.</p>
+      </div>
+
+      <!-- Selector de Pestañas y Controles de Zoom -->
+      <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-5 shadow-lg">
+        <div class="flex items-center justify-between flex-wrap gap-3 border-b border-slate-800 pb-3">
+          
+          <!-- Pestañas -->
+          <div class="flex flex-wrap gap-2">
+            <button @click="setDiagramTab('flujo_industrial')"
+                    class="px-4 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2"
+                    :class="activeDiagramTab === 'flujo_industrial' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
+              <span>🗺️ Diagrama 3: Estructura y Flujo Industrial (TD)</span>
+            </button>
+            <button @click="setDiagramTab('cadena_critica')"
+                    class="px-4 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2"
+                    :class="activeDiagramTab === 'cadena_critica' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
+              <span>⏱️ Diagrama 2: Cadena Crítica por Hitos (LR)</span>
+            </button>
+          </div>
+
+          <!-- Controles de Zoom -->
+          <div class="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1 rounded-xl border border-slate-800 text-xs">
+            <span class="text-slate-400 text-[11px] font-mono mr-1">Zoom:</span>
+            <button @click="zoomOut()" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs" title="Reducir zoom">−</button>
+            <span class="px-2 font-mono text-slate-300 text-xs" x-text="Math.round(diagramZoom * 100) + '%'">100%</span>
+            <button @click="zoomIn()" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs" title="Aumentar zoom">+</button>
+            <button @click="zoomReset()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-[10px] font-mono transition ml-1" title="Restablecer a 100%">Reset</button>
+          </div>
+        </div>
+
+        <!-- Viewport del Diagrama Vectorial (Con Scroll Horizontal y Zoom) -->
+        <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 sm:p-6 overflow-x-auto custom-scrollbar min-h-[420px] flex items-center justify-center">
+          <div :style="'transform: scale(' + diagramZoom + '); transform-origin: top center; transition: transform 0.15s ease-out;'"
+               class="w-full flex justify-center">
+            
+            <!-- Target Diagrama 3 (Flujo Industrial) -->
+            <div id="mermaid-flujo-target" 
+                 x-show="activeDiagramTab === 'flujo_industrial'"
+                 class="w-full flex justify-center">
+              <span class="text-xs text-slate-500 font-mono animate-pulse">Renderizando diagrama de flujo industrial...</span>
+            </div>
+
+            <!-- Target Diagrama 2 (Cadena Crítica) -->
+            <div id="mermaid-cadena-target" 
+                 x-show="activeDiagramTab === 'cadena_critica'"
+                 class="w-full flex justify-center">
+              <span class="text-xs text-slate-500 font-mono animate-pulse">Renderizando diagrama de cadena crítica...</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Detalle Contextual según el Diagrama Activo -->
+        
+        <!-- Puntos Clave Diagrama 3 -->
+        <div x-show="activeDiagramTab === 'flujo_industrial'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-2">
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-sky-400 block mb-1">📦 Abastecimiento y Almacén</strong>
+            <p class="text-slate-300 leading-relaxed">Libera láminas, tubos, melamina y pintura con base en la orden de producción para eliminar tiempos muertos.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-emerald-400 block mb-1">📐 Prensa Plegadora CNC</strong>
+            <p class="text-slate-300 leading-relaxed">Doblado secuencial inmediato tras corte láser y punzonado antes de entregar piezas conformadas a soldadura.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-rose-400 block mb-1">🛡️ Control Pre-Pintura (QC)</strong>
+            <p class="text-slate-300 leading-relaxed">Preparación, limpieza y desengrase previos para evitar saturar el horno electrostático con piezas defectuosas.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-purple-400 block mb-1">🪵 Ensamble Final e Integración</strong>
+            <p class="text-slate-300 leading-relaxed">Carpintería no entra al horno (200°C); avanza en paralelo y converge con las piezas metálicas horneadas.</p>
+          </div>
+        </div>
+
+        <!-- Tarjetas por Hitos Diagrama 2 -->
+        <div x-show="activeDiagramTab === 'cadena_critica'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+          <template x-for="c in data?.cadena_critica || []" :key="c.paso">
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2 hover:border-slate-700 transition">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-400 font-mono" x-text="c.paso_label"></span>
+                <span class="text-[10px] text-slate-400 font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800" x-text="c.ventana"></span>
+              </div>
+              <h5 class="font-bold text-white text-sm" x-text="c.nombre"></h5>
+              <p class="text-xs text-slate-300 leading-relaxed" x-text="c.hito"></p>
+              <div class="pt-1.5 border-t border-slate-800/80 text-[11px] text-slate-400">
+                Responsables: <strong class="text-slate-200" x-text="c.responsables"></strong>
+              </div>
+            </div>
+          </template>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 5: PACTO BILATERAL (TALLER ↔ GERENCIA) -->
+    <!-- ======================================================================= -->
+    <section id="pacto" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-indigo-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">5. Matriz de Corresponsabilidad Bilateral (No Monetaria)</h3>
+        <p class="text-slate-400 text-sm">Equilibrio simétrico de compromisos entre el equipo operativo del taller y la dirección de la empresa.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Columna 1: Aportes del Taller -->
+        <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4">
+          <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+            <span class="text-2xl">🔧</span>
+            <div>
+              <h4 class="font-bold text-white text-base">Aportes del Taller (Personal de Planta)</h4>
+              <span class="text-xs text-emerald-400">Compromisos de Ejecución y Disciplina Operativa</span>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <template x-for="item in data?.pacto_bilateral?.taller || []" :key="item.num">
+              <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/80 space-y-1">
+                <h5 class="font-bold text-sm text-slate-200" x-text="item.titulo"></h5>
+                <p class="text-xs text-slate-300 leading-relaxed" x-text="item.detalle"></p>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Columna 2: Garantías de la Gerencia -->
+        <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4">
+          <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+            <span class="text-2xl">🏢</span>
+            <div>
+              <h4 class="font-bold text-white text-base">Garantías de la Gerencia (Dirección)</h4>
+              <span class="text-xs text-sky-400">Compromisos de Blindaje, Combustible y Logística</span>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <template x-for="item in data?.pacto_bilateral?.gerencia || []" :key="item.num">
+              <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/80 space-y-1">
+                <h5 class="font-bold text-sm text-slate-200" x-text="item.titulo"></h5>
+                <p class="text-xs text-slate-300 leading-relaxed" x-text="item.detalle"></p>
+              </div>
+            </template>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 6: HUB DE FORMULARIOS DE DIAGNÓSTICO (CON GENERADOR QR DINÁMICO) -->
+    <!-- ======================================================================= -->
+    <section id="formularios" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-rose-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">6. Herramientas de Diagnóstico Continuo</h3>
+        <p class="text-slate-400 text-sm">Instrumentos abiertos para recolectar datos empíricos de movilidad, tiempos y manejo de diésel.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <template x-for="f in data?.formularios || []" :key="f.id">
+          <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition flex flex-col justify-between space-y-4 shadow-md">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-3xl" x-text="f.icono"></span>
+                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700" x-text="f.codigo"></span>
+              </div>
+              <h4 class="font-bold text-white text-base" x-text="f.nombre"></h4>
+              <div class="text-xs text-slate-400">
+                <span>Destinatarios:</span>
+                <strong class="text-slate-300 block mt-0.5" x-text="f.destinatarios"></strong>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed" x-text="f.proposito"></p>
+            </div>
+
+            <div class="border-t border-slate-800 pt-4 flex items-center gap-2">
+              <a :href="f.url" target="_blank"
+                 class="flex-1 text-center py-2.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition shadow flex items-center justify-center gap-1">
+                <span>📲 Abrir Formulario</span>
+                <span>↗</span>
+              </a>
+              <button @click="openQr(f)"
+                      class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl transition border border-slate-700"
+                      title="Ver Código QR para escanear en planta">
+                <span>📱 QR</span>
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- MÓDULO 7: GLOSARIO TÉCNICO CON BÚSQUEDA INSTANTÁNEA -->
+    <!-- ======================================================================= -->
+    <section id="glosario" class="scroll-mt-36 space-y-6">
+      <div class="border-l-4 border-slate-500 pl-4">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">7. Glosario de Términos y Conceptos Operativos</h3>
+        <p class="text-slate-400 text-sm">Definiciones estandarizadas para eliminar ambigüedades técnicas en la operación.</p>
+      </div>
+
+      <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-5">
+        <!-- Input de Búsqueda -->
+        <div class="relative">
+          <input type="text" x-model="searchGlossary" placeholder="🔍 Buscar término técnico (ej. Franja Dorada, Concurrencia, Cadena Crítica)..."
+                 class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition">
+          <span x-show="searchGlossary" @click="searchGlossary = ''" class="absolute right-4 top-3.5 text-xs text-slate-500 hover:text-slate-300 cursor-pointer font-bold">✕ Limpiar</span>
+        </div>
+
+        <!-- Lista Filtrada -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <template x-for="g in filteredGlossary" :key="g.termino">
+            <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800/80 space-y-1">
+              <h5 class="font-bold text-sm text-emerald-400 font-mono" x-text="g.termino"></h5>
+              <p class="text-xs text-slate-300 leading-relaxed" x-text="g.definicion"></p>
+            </div>
+          </template>
+        </div>
+
+        <div x-show="filteredGlossary.length === 0" class="text-center py-6 text-slate-500 text-xs">
+          No se encontraron términos que coincidan con la búsqueda.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CÓDIGO QR PARA ESCANEAR EN PLANTA -->
+  <!-- ========================================================================= -->
+  <div x-show="qrModalOpen" x-transition
+       class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+       @click.self="qrModalOpen = false" style="display: none;">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative">
+      <button @click="qrModalOpen = false" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+      
+      <div class="space-y-1">
+        <span class="text-xs font-bold text-emerald-400 font-mono" x-text="currentQrForm ? currentQrForm.codigo : ''"></span>
+        <h4 class="font-bold text-white text-base" x-text="currentQrForm ? currentQrForm.nombre : ''"></h4>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl inline-block shadow-inner" id="qr-canvas-container">
+        <!-- El canvas de QRCode.js se inyecta aquí dinámicamente -->
+      </div>
+
+      <p class="text-xs text-slate-400">Escanea este código con la cámara de tu celular para abrir directamente el formulario de Google.</p>
+
+      <a :href="currentQrForm?.url" target="_blank" class="block w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition">
+        Abrir enlace directo ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================================= -->
+  <footer class="bg-slate-900 border-t border-slate-800 px-4 py-8 mt-12 text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div>
+        <strong class="text-slate-200">Sanesca Exhibidores C.A.</strong> — Documento Vivo de Facilitación Operativa
+        <p class="text-[11px] text-slate-500 mt-0.5">Versión DocSemVer 2.0.0 (Agosto 2026) · Encargado de Datos & Jefatura de Almacén</p>
+      </div>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="https://cazx008.github.io/sanesca-dashboard/" class="text-emerald-400 hover:underline flex items-center gap-1">
+          <span>⚡ Monitoreo en Vivo</span>
+          <span>↗</span>
+        </a>
+        <a href="assets/Documento_Marco_Conciliacion_Sanesca.pdf" download="Documento_Marco_Conciliacion_Sanesca.pdf" class="text-slate-300 hover:text-white flex items-center gap-1">
+          <span>📄 Descargar Documento (PDF)</span>
+          <span class="font-bold">⤓</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
