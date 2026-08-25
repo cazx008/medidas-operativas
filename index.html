@@ -20,6 +20,11 @@
               600: '#16a34a',
               700: '#15803d',
             }
+          },
+          fontFamily: {
+            sans: ['Geist', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['Geist Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+            serifInst: ['Instrument Serif', 'Georgia', 'serif'],
           }
         }
       }
@@ -45,12 +50,9 @@
 
   <style>
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Geist', 'Inter', sans-serif;
     }
-    .font-geist {
-      font-family: 'Geist', system-ui, sans-serif;
-    }
-    .font-mono-geist {
+    code, pre, .font-mono {
       font-family: 'Geist Mono', monospace;
     }
     .font-serif-inst {
@@ -88,7 +90,7 @@
         <div>
           <h1 class="text-white font-extrabold text-base sm:text-lg tracking-tight flex items-center gap-2">
             <span>🏭 Medidas Operativas</span>
-            <span class="hidden sm:inline-block text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">v2.0 DocSemVer</span>
+            <span class="hidden sm:inline-block text-[11px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">v2.0 DocSemVer</span>
           </h1>
           <p class="text-xs text-slate-400 hidden md:block">Marco de Conciliación, Resiliencia Energética y Cadena Crítica</p>
         </div>
@@ -99,13 +101,13 @@
         <a href="https://cazx008.github.io/sanesca-dashboard/" target="_blank"
            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 transition shadow-sm">
           <span>⚡ Monitoreo en Vivo</span>
-          <span class="text-xs">↗</span>
+          <span class="text-xs font-mono">↗</span>
         </a>
         <a href="assets/Documento_Marco_Conciliacion_Sanesca.pdf" download="Documento_Marco_Conciliacion_Sanesca.pdf"
            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm"
            title="Descargar documento marco oficial en formato PDF">
           <span>📄 Descargar PDF</span>
-          <span class="text-xs font-bold">⤓</span>
+          <span class="text-xs font-bold font-mono">⤓</span>
         </a>
       </div>
     </div>
@@ -131,13 +133,14 @@
         
         <!-- Tarjeta Principal del Día -->
         <div class="lg:col-span-7 space-y-3">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 border border-slate-700 text-slate-300">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 border border-slate-700 text-slate-300 font-mono">
             <span class="w-2 h-2 rounded-full animate-ping"
                   :class="currentStatusFranja === 'dorada' ? 'bg-emerald-400' : (currentStatusFranja === 'riesgo' ? 'bg-rose-500' : 'bg-blue-400')"></span>
             <span x-text="currentTimeStr || 'Cargando fecha y hora...'"></span>
+            <span class="text-[10px] text-slate-400 pl-1 border-l border-slate-700">🇻🇪 UTC-4</span>
           </div>
 
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-serif-inst">
             Pacto Operativo de Planta Sanesca
           </h2>
           <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
@@ -145,14 +148,14 @@
           </p>
 
           <!-- Badges de parámetros del Generador -->
-          <div class="flex flex-wrap items-center gap-2 pt-2 text-xs">
-            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
+          <div class="flex flex-wrap items-center gap-2 pt-2 text-xs font-mono">
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300">
               ⚡ Generador Iveco Aifo (28 kW PRP / 92A)
             </span>
-            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300">
               ⛽ Consumo: ~6.2 L/h (70% carga)
             </span>
-            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-mono">
+            <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-300">
               📊 18 Semanas (62 cortes consolidados)
             </span>
           </div>
@@ -218,7 +221,7 @@
     <!-- ======================================================================= -->
     <section id="principios" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-emerald-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">1. Principios de Convivencia y Propósito</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">1. Principios de Convivencia y Propósito</h3>
         <p class="text-slate-400 text-sm">Este marco no constituye un reglamento punitivo ni una imposición jerárquica: es una herramienta de claridad y planificación compartida.</p>
       </div>
 
@@ -245,7 +248,7 @@
     <!-- ======================================================================= -->
     <section id="estadistica" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-amber-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">2. Diagnóstico del Panorama Energético</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">2. Diagnóstico del Panorama Energético</h3>
         <p class="text-slate-400 text-sm">Comportamiento consolidado sobre 62 eventos de corte en 18 semanas continuas de registro.</p>
       </div>
 
@@ -352,7 +355,7 @@
     <!-- ======================================================================= -->
     <section id="concurrencia" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-blue-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">3. Matriz Técnica de Concurrencia de Maquinaria</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">3. Matriz Técnica de Concurrencia de Maquinaria</h3>
         <p class="text-slate-400 text-sm">Reglas de balance eléctrico bajo el Generador Iveco Aifo (28 kW PRP / 92A) para evitar sobrecargas y caídas de planta.</p>
       </div>
 
@@ -436,7 +439,7 @@
     <!-- ======================================================================= -->
     <section id="cadena" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-purple-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">4. Arquitectura de Telemetría, Cadena Crítica y Flujo Industrial</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">4. Arquitectura de Telemetría, Cadena Crítica y Flujo Industrial</h3>
         <p class="text-slate-400 text-sm">Visualizaciones vectoriales de precisión: pipeline de datos, compromisos semanales y convergencia de planta (adaptadas 100% a pantallas móviles y desktop).</p>
       </div>
 
@@ -1149,7 +1152,7 @@
     <!-- ======================================================================= -->
     <section id="pacto" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-indigo-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">5. Matriz de Corresponsabilidad Bilateral (No Monetaria)</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">5. Matriz de Corresponsabilidad Bilateral (No Monetaria)</h3>
         <p class="text-slate-400 text-sm">Equilibrio simétrico de compromisos entre el equipo operativo del taller y la dirección de la empresa.</p>
       </div>
 
@@ -1203,7 +1206,7 @@
     <!-- ======================================================================= -->
     <section id="formularios" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-rose-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">6. Herramientas de Diagnóstico Continuo</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">6. Herramientas de Diagnóstico Continuo</h3>
         <p class="text-slate-400 text-sm">Instrumentos abiertos para recolectar datos empíricos de movilidad, tiempos y manejo de diésel.</p>
       </div>
 
@@ -1245,7 +1248,7 @@
     <!-- ======================================================================= -->
     <section id="glosario" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-slate-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">7. Glosario de Términos y Conceptos Operativos</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white font-serif-inst">7. Glosario de Términos y Conceptos Operativos</h3>
         <p class="text-slate-400 text-sm">Definiciones estandarizadas para eliminar ambigüedades técnicas en la operación.</p>
       </div>
 
