@@ -449,10 +449,10 @@ document.addEventListener('alpine:init', () => {
     currentTimeStr: '',
     currentStatusFranja: '',
     
-    // Pestañas de diagramas (3 diagramas vectoriales SVG puros)
+    // Pestañas de diagramas (3 diagramas vectoriales SVG puros + Vistas Móviles Adaptadas)
     activeDiagramTab: 'telemetria', // 'telemetria' (A), 'cadena_critica' (B), 'flujo_industrial' (C)
     diagramZoom: 1.0,
-    cadenaMobileView: false, // Selector para vista timeline en móvil
+    isMobileDiagramView: typeof window !== 'undefined' && window.innerWidth < 768, // Auto-detect móvil
     
     // Simulador de concurrencia
     selectedMachine1: 'laser',
@@ -466,6 +466,15 @@ document.addEventListener('alpine:init', () => {
     currentQrForm: null,
 
     async init() {
+      // Detección reactiva de tamaño de pantalla
+      if (typeof window !== 'undefined') {
+        window.addEventListener('resize', () => {
+          if (window.innerWidth >= 768 && this.isMobileDiagramView) {
+            // En desktop puede volver a panorámica si el usuario lo desea
+          }
+        });
+      }
+      
       // Intentar actualizar desde JSON si está en un servidor HTTP, sino usa MASTER_CONCILIACION_DATA directo
       try {
         const res = await fetch('data/conciliacion.json');
