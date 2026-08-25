@@ -26,16 +26,13 @@
     }
   </script>
 
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Geist, Geist Mono, Instrument Serif, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
-  <!-- Mermaid.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js"></script>
 
   <!-- QRCode.js CDN (Rock-solid standalone) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -48,36 +45,46 @@
 
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
     }
-    code, pre {
-      font-family: 'JetBrains Mono', monospace;
+    .font-geist {
+      font-family: 'Geist', system-ui, sans-serif;
+    }
+    .font-mono-geist {
+      font-family: 'Geist Mono', monospace;
+    }
+    .font-serif-inst {
+      font-family: 'Instrument Serif', Georgia, serif;
     }
     .custom-scrollbar::-webkit-scrollbar {
       height: 6px;
       width: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #1e293b;
+      background: #0f172a;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #475569;
+      background: #334155;
       border-radius: 4px;
+    }
+    .logo-contrast-plate {
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15), 0 2px 8px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col" x-data="medidasApp">
 
   <!-- ========================================================================= -->
-  <!-- ZONA 0: HEADER COMPARTIDO (IDÉNTICO A SANESCA-DASHBOARD CON ENLACE CRUZADO) -->
-  <!-- ========================================================================= -->
-  <!-- ========================================================================= -->
-  <!-- ZONA 0: HEADER Y NAVEGACIÓN UNIFICADA (STICKY TOP SIN ENTRECORTAR) -->
+  <!-- ZONA 0: HEADER Y NAVEGACIÓN UNIFICADA (STICKY TOP CON LOGO MEJORADO) -->
   <!-- ========================================================================= -->
   <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-40 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 py-2.5 sm:px-6 flex items-center justify-between border-b border-slate-800/60">
       <div class="flex items-center gap-3">
-        <img src="assets/logo-sanesca.png" alt="Sanesca" class="h-8 w-auto object-contain" onerror="this.style.display='none'">
+        <!-- Placa de Alto Contraste para el Logo de Sanesca -->
+        <div class="logo-contrast-plate px-2 py-1 rounded-lg flex items-center justify-center transition hover:scale-105">
+          <img src="assets/logo-sanesca.png" alt="Sanesca Exhibidores" class="h-6 sm:h-7 w-auto object-contain" onerror="this.style.display='none'">
+        </div>
         <div>
           <h1 class="text-white font-extrabold text-base sm:text-lg tracking-tight flex items-center gap-2">
             <span>🏭 Medidas Operativas</span>
@@ -425,59 +432,436 @@
     </section>
 
     <!-- ======================================================================= -->
-    <!-- MÓDULO 4: CADENA CRÍTICA Y FLUJO DE PRODUCCIÓN (AMBOS DIAGRAMAS MERMAID) -->
+    <!-- MÓDULO 4: ARQUITECTURA TÉCNICA, CADENA CRÍTICA Y FLUJO INDUSTRIAL -->
     <!-- ======================================================================= -->
     <section id="cadena" class="scroll-mt-36 space-y-6">
       <div class="border-l-4 border-purple-500 pl-4">
-        <h3 class="text-xl sm:text-2xl font-extrabold text-white">4. Cadena Crítica y Flujo de Dependencias</h3>
-        <p class="text-slate-400 text-sm">Secuencia de compromisos sucesivos para proteger la salida a tiempo de las tiendas completas.</p>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-white">4. Arquitectura de Telemetría, Cadena Crítica y Flujo Industrial</h3>
+        <p class="text-slate-400 text-sm">Visualizaciones vectoriales de precisión (estándar editorial SVG puro): pipeline de datos, compromisos semanales y convergencia de planta.</p>
       </div>
 
       <!-- Selector de Pestañas y Controles de Zoom -->
-      <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-5 shadow-lg">
+      <div class="bg-slate-900 rounded-2xl p-4 sm:p-6 border border-slate-800 space-y-5 shadow-lg">
         <div class="flex items-center justify-between flex-wrap gap-3 border-b border-slate-800 pb-3">
           
-          <!-- Pestañas -->
+          <!-- Pestañas de Diagramas -->
           <div class="flex flex-wrap gap-2">
-            <button @click="setDiagramTab('flujo_industrial')"
-                    class="px-4 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2"
-                    :class="activeDiagramTab === 'flujo_industrial' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
-              <span>🗺️ Diagrama 3: Estructura y Flujo Industrial (TD)</span>
+            <button @click="setDiagramTab('telemetria')"
+                    class="px-3.5 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5"
+                    :class="activeDiagramTab === 'telemetria' ? 'bg-purple-600 text-white shadow-purple-900/40' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
+              <span>📐 Diag A: Telemetría (4 Capas)</span>
             </button>
             <button @click="setDiagramTab('cadena_critica')"
-                    class="px-4 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-2"
-                    :class="activeDiagramTab === 'cadena_critica' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
-              <span>⏱️ Diagrama 2: Cadena Crítica por Hitos (LR)</span>
+                    class="px-3.5 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5"
+                    :class="activeDiagramTab === 'cadena_critica' ? 'bg-purple-600 text-white shadow-purple-900/40' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
+              <span>⏱️ Diag B: Cadena Crítica (Hitos)</span>
+            </button>
+            <button @click="setDiagramTab('flujo_industrial')"
+                    class="px-3.5 py-2 text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5"
+                    :class="activeDiagramTab === 'flujo_industrial' ? 'bg-purple-600 text-white shadow-purple-900/40' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'">
+              <span>🏭 Diag C: Flujo Industrial (Planta)</span>
             </button>
           </div>
 
-          <!-- Controles de Zoom -->
-          <div class="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1 rounded-xl border border-slate-800 text-xs">
-            <span class="text-slate-400 text-[11px] font-mono mr-1">Zoom:</span>
-            <button @click="zoomOut()" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs" title="Reducir zoom">−</button>
-            <span class="px-2 font-mono text-slate-300 text-xs" x-text="Math.round(diagramZoom * 100) + '%'">100%</span>
-            <button @click="zoomIn()" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs" title="Aumentar zoom">+</button>
-            <button @click="zoomReset()" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-[10px] font-mono transition ml-1" title="Restablecer a 100%">Reset</button>
+          <!-- Controles de Vista y Zoom -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Selector de Vista para Cadena Crítica en Móvil -->
+            <template x-if="activeDiagramTab === 'cadena_critica'">
+              <button @click="cadenaMobileView = !cadenaMobileView"
+                      class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1">
+                <span x-text="cadenaMobileView ? '🖥️ Vista Panorámica' : '📱 Vista Móvil (Timeline)'"></span>
+              </button>
+            </template>
+
+            <!-- Zoom -->
+            <div class="flex items-center gap-1 bg-slate-950 px-2 py-1 rounded-xl border border-slate-800 text-xs">
+              <span class="text-slate-400 text-[11px] font-mono mr-1">Zoom:</span>
+              <button @click="zoomOut()" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs" title="Reducir">−</button>
+              <span class="px-1.5 font-mono text-slate-300 text-xs" x-text="Math.round(diagramZoom * 100) + '%'">100%</span>
+              <button @click="zoomIn()" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition text-xs" title="Aumentar">+</button>
+              <button @click="zoomReset()" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-[10px] font-mono transition" title="Restablecer">100%</button>
+            </div>
           </div>
         </div>
 
-        <!-- Viewport del Diagrama Vectorial (Con Scroll Horizontal y Zoom) -->
-        <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 sm:p-6 overflow-x-auto custom-scrollbar min-h-[420px] flex items-center justify-center">
+        <!-- =================================================================== -->
+        <!-- VIEWPORT PRINCIPAL DE DIAGRAMAS (VECTORIAL PURO INLINE) -->
+        <!-- =================================================================== -->
+        <div class="bg-slate-950 rounded-xl border border-slate-800 p-3 sm:p-6 overflow-x-auto custom-scrollbar flex items-center justify-center min-h-[420px]">
           <div :style="'transform: scale(' + diagramZoom + '); transform-origin: top center; transition: transform 0.15s ease-out;'"
                class="w-full flex justify-center">
-            
-            <!-- Target Diagrama 3 (Flujo Industrial) -->
-            <div id="mermaid-flujo-target" 
-                 x-show="activeDiagramTab === 'flujo_industrial'"
-                 class="w-full flex justify-center">
-              <span class="text-xs text-slate-500 font-mono animate-pulse">Renderizando diagrama de flujo industrial...</span>
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- DIAGRAMA A: ARQUITECTURA DE TELEMETRÍA (4 CAPAS E2E) -->
+            <!-- --------------------------------------------------------------- -->
+            <div x-show="activeDiagramTab === 'telemetria'" class="w-full flex justify-center">
+              <svg viewBox="0 0 1000 680" class="w-full min-w-[820px] max-w-[980px] h-auto" role="img" aria-labelledby="diag-a-title diag-a-desc">
+                <title id="diag-a-title">Arquitectura del Pipeline de Telemetría E2E</title>
+                <desc id="diag-a-desc">Diagrama de 4 capas: Fuentes de datos y campo, Ingesta y cálculo estadístico, Persistencia en Notion y Capa web.</desc>
+                <defs>
+                  <marker id="arr-std" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+                  </marker>
+                  <marker id="arr-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#10b981" />
+                  </marker>
+                  <marker id="arr-amber" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#f59e0b" />
+                  </marker>
+                  <marker id="arr-sky" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#38bdf8" />
+                  </marker>
+                </defs>
+
+                <!-- Fondo base -->
+                <rect width="100%" height="100%" fill="#090d16" rx="12"/>
+
+                <!-- ZONA 1: FUENTES DE DATOS & CAMPO -->
+                <rect x="32" y="44" width="936" height="116" rx="8" fill="rgba(30,41,59,0.35)" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
+                <rect x="48" y="36" width="220" height="18" rx="4" fill="#090d16"/>
+                <text x="56" y="49" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace" font-weight="600" letter-spacing="0.1em">1. FUENTES DE DATOS &amp; CAMPO</text>
+
+                <!-- Nodo 1: Analizador Trifásico -->
+                <rect x="56" y="72" width="264" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="68" y="82" width="64" height="14" rx="2" fill="transparent" stroke="#38bdf8" stroke-width="0.8"/>
+                <text x="100" y="92" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">IOT / SENSOR</text>
+                <text x="68" y="114" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Analizador Trifásico de Red</text>
+                <text x="68" y="128" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">220V · 60Hz · Distorsión THD · FP</text>
+
+                <!-- Nodo 2 [FOCAL]: Generador Iveco Aifo -->
+                <rect x="352" y="72" width="296" height="68" rx="6" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="1.5"/>
+                <rect x="364" y="82" width="70" height="14" rx="2" fill="transparent" stroke="#10b981" stroke-width="0.8"/>
+                <text x="399" y="92" fill="#10b981" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">GENERADOR</text>
+                <text x="364" y="114" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Generador Iveco Aifo 8031 I</text>
+                <text x="364" y="128" fill="#34d399" font-size="10" font-family="'Geist Mono', monospace">28 kW PRP / 92A · ~6.2 L/h · 300h mant.</text>
+
+                <!-- Nodo 3: Bitácoras y Formularios -->
+                <rect x="680" y="72" width="264" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="692" y="82" width="70" height="14" rx="2" fill="transparent" stroke="#f59e0b" stroke-width="0.8"/>
+                <text x="727" y="92" fill="#f59e0b" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">MANUAL / QR</text>
+                <text x="692" y="114" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Bitácoras y Hub de Formularios</text>
+                <text x="692" y="128" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">F1 Movilidad · F2 Tiempos · F3 Diésel</text>
+
+                <!-- ZONA 2: INGESTA Y PROCESAMIENTO -->
+                <rect x="32" y="196" width="936" height="116" rx="8" fill="rgba(30,41,59,0.35)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+                <rect x="48" y="188" width="290" height="18" rx="4" fill="#090d16"/>
+                <text x="56" y="201" fill="#f59e0b" font-size="10" font-family="'Geist Mono', monospace" font-weight="600" letter-spacing="0.1em">2. INGESTA, VALIDACIÓN Y CÁLCULO ESTADÍSTICO</text>
+
+                <!-- Nodo 4: Depuración y Validación -->
+                <rect x="56" y="224" width="264" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="68" y="234" width="60" height="14" rx="2" fill="transparent" stroke="#38bdf8" stroke-width="0.8"/>
+                <text x="98" y="244" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PIPELINE</text>
+                <text x="68" y="266" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Validación y Filtro de Ruido</text>
+                <text x="68" y="280" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">Detección de outliers y microcortes</text>
+
+                <!-- Nodo 5 [FOCAL]: Motor de Ventanas Móviles Δ -->
+                <rect x="352" y="224" width="296" height="68" rx="6" fill="rgba(245,158,11,0.08)" stroke="#f59e0b" stroke-width="1.5"/>
+                <rect x="364" y="234" width="60" height="14" rx="2" fill="transparent" stroke="#f59e0b" stroke-width="0.8"/>
+                <text x="394" y="244" fill="#f59e0b" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">MOTOR Δ</text>
+                <text x="364" y="266" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Detección Franja Dorada &amp; Δ</text>
+                <text x="364" y="280" fill="#fbbf24" font-size="10" font-family="'Geist Mono', monospace">Ventanas móviles 7/15/30d · 06:00-11:00 AM</text>
+
+                <!-- Nodo 6: Percentiles y Probabilidad -->
+                <rect x="680" y="224" width="264" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="692" y="234" width="70" height="14" rx="2" fill="transparent" stroke="#f43f5e" stroke-width="0.8"/>
+                <text x="727" y="244" fill="#f43f5e" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PROBABILIDAD</text>
+                <text x="692" y="266" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Semáforo Diario de Cortes</text>
+                <text x="692" y="280" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">62 eventos consolidados en 18 sem.</text>
+
+                <!-- ZONA 3: PERSISTENCIA -->
+                <rect x="32" y="348" width="936" height="116" rx="8" fill="rgba(30,41,59,0.35)" stroke="rgba(192,132,252,0.3)" stroke-width="1"/>
+                <rect x="48" y="340" width="250" height="18" rx="4" fill="#090d16"/>
+                <text x="56" y="353" fill="#c084fc" font-size="10" font-family="'Geist Mono', monospace" font-weight="600" letter-spacing="0.1em">3. PERSISTENCIA Y FUENTE DE VERDAD</text>
+
+                <!-- Nodo 7: Notion DBs -->
+                <rect x="96" y="376" width="368" height="68" rx="6" fill="#0f172a" stroke="#a855f7" stroke-width="1"/>
+                <rect x="108" y="386" width="76" height="14" rx="2" fill="transparent" stroke="#c084fc" stroke-width="0.8"/>
+                <text x="146" y="396" fill="#c084fc" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">NOTION API</text>
+                <text x="108" y="418" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Ecosistema Notion (6 DBs Maestras)</text>
+                <text x="108" y="432" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">Historial · Resumen Semanal · Monitoreo en Vivo</text>
+
+                <!-- Nodo 8: JSON Snapshots -->
+                <rect x="536" y="376" width="368" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="548" y="386" width="80" height="14" rx="2" fill="transparent" stroke="#38bdf8" stroke-width="0.8"/>
+                <text x="588" y="396" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">SNAPSHOTS</text>
+                <text x="548" y="418" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Snapshots JSON &amp; Logs Locales</text>
+                <text x="548" y="432" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">data/conciliacion.json · 06_Logs_Historicos/</text>
+
+                <!-- ZONA 4: APLICACIÓN WEB -->
+                <rect x="32" y="500" width="936" height="116" rx="8" fill="rgba(30,41,59,0.35)" stroke="rgba(16,185,129,0.3)" stroke-width="1"/>
+                <rect x="48" y="492" width="280" height="18" rx="4" fill="#090d16"/>
+                <text x="56" y="505" fill="#34d399" font-size="10" font-family="'Geist Mono', monospace" font-weight="600" letter-spacing="0.1em">4. CAPA DE APLICACIÓN WEB &amp; ALERTAS</text>
+
+                <!-- Nodo 9: Medidas Operativas Web -->
+                <rect x="56" y="528" width="270" height="68" rx="6" fill="rgba(16,185,129,0.06)" stroke="#10b981" stroke-width="1.2"/>
+                <rect x="68" y="538" width="60" height="14" rx="2" fill="transparent" stroke="#10b981" stroke-width="0.8"/>
+                <text x="98" y="548" fill="#10b981" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PORTAL SPA</text>
+                <text x="68" y="570" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Medidas Operativas Web</text>
+                <text x="68" y="584" fill="#34d399" font-size="10" font-family="'Geist Mono', monospace">Simulador 28kW · Cadena Crítica · QR Hub</text>
+
+                <!-- Nodo 10: Sanesca Dashboard -->
+                <rect x="364" y="528" width="270" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="376" y="538" width="68" height="14" rx="2" fill="transparent" stroke="#38bdf8" stroke-width="0.8"/>
+                <text x="410" y="548" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">DASHBOARD</text>
+                <text x="376" y="570" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Sanesca Dashboard en Vivo</text>
+                <text x="376" y="584" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">Pronóstico de hoy · Countdown de corte</text>
+
+                <!-- Nodo 11: Exportación & Reportes -->
+                <rect x="672" y="528" width="272" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <rect x="684" y="538" width="58" height="14" rx="2" fill="transparent" stroke="#cbd5e1" stroke-width="0.8"/>
+                <text x="713" y="548" fill="#cbd5e1" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">INFORMES</text>
+                <text x="684" y="570" fill="#f8fafc" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Reportes de Condición &amp; PDF</text>
+                <text x="684" y="584" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace">Documento Marco v2.0 · Alertas WhatsApp</text>
+
+                <!-- Conectores Ortogonales -->
+                <path d="M 188,140 V 216" fill="none" stroke="#38bdf8" stroke-width="1.2" marker-end="url(#arr-sky)"/>
+                <path d="M 500,140 V 216" fill="none" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr-accent)"/>
+                <path d="M 812,140 V 216" fill="none" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#arr-amber)"/>
+
+                <path d="M 188,292 V 336 H 280 V 368" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr-std)"/>
+                <path d="M 500,292 V 336 H 720 V 368" fill="none" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#arr-std)"/>
+
+                <path d="M 280,444 V 486 H 191 V 520" fill="none" stroke="#10b981" stroke-width="1.2" marker-end="url(#arr-accent)"/>
+                <path d="M 280,444 V 486 H 499 V 520" fill="none" stroke="#38bdf8" stroke-width="1.2" marker-end="url(#arr-sky)"/>
+                <path d="M 720,444 V 486 H 808 V 520" fill="none" stroke="#cbd5e1" stroke-width="1.2" marker-end="url(#arr-std)"/>
+
+                <!-- Leyenda Inferior -->
+                <line x1="32" y1="640" x2="968" y2="640" stroke="rgba(51,65,85,0.6)" stroke-width="0.8"/>
+                <text x="32" y="658" fill="#64748b" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEYENDA DE FLUJO:</text>
+                <circle cx="170" cy="655" r="4" fill="#38bdf8"/>
+                <text x="180" y="658" fill="#94a3b8" font-size="9" font-family="'Geist Mono', monospace">Telemetría de Red</text>
+                <circle cx="320" cy="655" r="4" fill="#10b981"/>
+                <text x="330" y="658" fill="#94a3b8" font-size="9" font-family="'Geist Mono', monospace">Generador &amp; Franja Dorada (Focal)</text>
+                <circle cx="560" cy="655" r="4" fill="#f59e0b"/>
+                <text x="570" y="658" fill="#94a3b8" font-size="9" font-family="'Geist Mono', monospace">Eventos y Probabilidad</text>
+                <circle cx="740" cy="655" r="4" fill="#c084fc"/>
+                <text x="750" y="658" fill="#94a3b8" font-size="9" font-family="'Geist Mono', monospace">Integración Notion API</text>
+              </svg>
             </div>
 
-            <!-- Target Diagrama 2 (Cadena Crítica) -->
-            <div id="mermaid-cadena-target" 
-                 x-show="activeDiagramTab === 'cadena_critica'"
-                 class="w-full flex justify-center">
-              <span class="text-xs text-slate-500 font-mono animate-pulse">Renderizando diagrama de cadena crítica...</span>
+            <!-- --------------------------------------------------------------- -->
+            <!-- DIAGRAMA B: CADENA CRÍTICA POR HITOS (LR / TIMELINE) -->
+            <!-- --------------------------------------------------------------- -->
+            <div x-show="activeDiagramTab === 'cadena_critica'" class="w-full flex flex-col items-center">
+              
+              <!-- Vista Panorámica Desktop (SVG Puro) -->
+              <div x-show="!cadenaMobileView" class="w-full flex justify-center">
+                <svg viewBox="0 0 1060 210" class="w-full min-w-[850px] max-w-[1040px] h-auto" role="img" aria-labelledby="diag-b-title diag-b-desc">
+                  <title id="diag-b-title">Cadena Crítica por Hitos de Producción</title>
+                  <desc id="diag-b-desc">Secuencia de 6 pasos desde el diseño hasta la salida de la tienda completa para liberar bonos semanales.</desc>
+                  <defs>
+                    <marker id="arr-step" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                      <polygon points="0 0, 8 3, 0 6" fill="#10b981" />
+                    </marker>
+                  </defs>
+
+                  <rect width="100%" height="100%" fill="#090d16" rx="12"/>
+
+                  <!-- Paso 0: Diseño y Planos -->
+                  <rect x="20" y="44" width="148" height="92" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                  <rect x="30" y="54" width="48" height="14" rx="2" fill="transparent" stroke="#38bdf8" stroke-width="0.8"/>
+                  <text x="54" y="64" fill="#38bdf8" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PASO 0</text>
+                  <text x="30" y="86" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Diseño y Planos</text>
+                  <text x="30" y="102" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace">Vie 03:00 PM</text>
+                  <text x="30" y="118" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Cardozo / Eduardo</text>
+
+                  <!-- Paso 1 [FOCAL]: Corte y Plegado CNC -->
+                  <rect x="196" y="44" width="152" height="92" rx="6" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="2"/>
+                  <rect x="206" y="54" width="48" height="14" rx="2" fill="transparent" stroke="#10b981" stroke-width="0.8"/>
+                  <text x="230" y="64" fill="#10b981" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PASO 1</text>
+                  <text x="206" y="86" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Corte y Plegado CNC</text>
+                  <text x="206" y="102" fill="#34d399" font-size="10" font-family="'Geist Mono', monospace">Lun-Mié 06-10:30 AM</text>
+                  <text x="206" y="118" fill="#a7f3d0" font-size="9" font-family="'Geist', sans-serif">Gabriel / Carlos / Pleg.</text>
+
+                  <!-- Paso 2: Ensamble y Soldadura -->
+                  <rect x="376" y="44" width="148" height="92" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+                  <rect x="386" y="54" width="48" height="14" rx="2" fill="transparent" stroke="#fbbf24" stroke-width="0.8"/>
+                  <text x="410" y="64" fill="#fbbf24" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PASO 2</text>
+                  <text x="386" y="86" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Ensamble Herr./Carp.</text>
+                  <text x="386" y="102" fill="#fcd34d" font-size="10" font-family="'Geist Mono', monospace">Lunes a Jueves</text>
+                  <text x="386" y="118" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Gustavo / Alí / Wilf.</text>
+
+                  <!-- Paso 3: Pintura y Horno 200°C -->
+                  <rect x="552" y="44" width="148" height="92" rx="6" fill="#0f172a" stroke="#fb7185" stroke-width="1.5"/>
+                  <rect x="562" y="54" width="48" height="14" rx="2" fill="transparent" stroke="#fb7185" stroke-width="0.8"/>
+                  <text x="586" y="64" fill="#fb7185" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PASO 3</text>
+                  <text x="562" y="86" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Pintura y Horno 200°</text>
+                  <text x="562" y="102" fill="#fda4af" font-size="10" font-family="'Geist Mono', monospace">Miércoles y Jueves</text>
+                  <text x="562" y="118" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Julio D. / Barbara / Neuro</text>
+
+                  <!-- Paso 3.5: Embalaje y QC -->
+                  <rect x="728" y="44" width="148" height="92" rx="6" fill="#0f172a" stroke="#c084fc" stroke-width="1.5"/>
+                  <rect x="738" y="54" width="56" height="14" rx="2" fill="transparent" stroke="#c084fc" stroke-width="0.8"/>
+                  <text x="766" y="64" fill="#c084fc" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PASO 3.5</text>
+                  <text x="738" y="86" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Embalaje y QC</text>
+                  <text x="738" y="102" fill="#d8b4fe" font-size="10" font-family="'Geist Mono', monospace">Jueves y Viernes</text>
+                  <text x="738" y="118" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Keyver / Yorvel</text>
+
+                  <!-- Paso 4 [FOCAL]: Tienda Completa -->
+                  <rect x="904" y="44" width="136" height="92" rx="6" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="2"/>
+                  <rect x="914" y="54" width="48" height="14" rx="2" fill="transparent" stroke="#10b981" stroke-width="0.8"/>
+                  <text x="938" y="64" fill="#10b981" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">PASO 4</text>
+                  <text x="914" y="86" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Tienda Completa</text>
+                  <text x="914" y="102" fill="#4ade80" font-size="10" font-family="'Geist Mono', monospace">Viernes Cierre</text>
+                  <text x="914" y="118" fill="#bbf7d0" font-size="9" font-family="'Geist', sans-serif">Despacho / Bono</text>
+
+                  <!-- Flechas Conectoras -->
+                  <path d="M 168,90 H 190" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-step)"/>
+                  <path d="M 348,90 H 370" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-step)"/>
+                  <path d="M 524,90 H 546" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-step)"/>
+                  <path d="M 700,90 H 722" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-step)"/>
+                  <path d="M 876,90 H 898" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-step)"/>
+
+                  <!-- Leyenda y Compromiso de Bono -->
+                  <line x1="20" y1="164" x2="1040" y2="164" stroke="rgba(51,65,85,0.6)" stroke-width="0.8"/>
+                  <text x="20" y="184" fill="#10b981" font-size="11" font-family="'Geist', sans-serif" font-weight="600">🎯 Regla de Oro:</text>
+                  <text x="136" y="184" fill="#cbd5e1" font-size="11" font-family="'Geist', sans-serif">El cumplimiento de los Pasos 0 al 3.5 en sus franjas horarias garantiza la salida de la Tienda Completa el Viernes, liberando el Bono Semanal de Producción.</text>
+                </svg>
+              </div>
+
+              <!-- Vista Móvil Adaptativa (Timeline Stepper Vertical) -->
+              <div x-show="cadenaMobileView" class="w-full max-w-lg space-y-3 py-2 text-left">
+                <template x-for="c in data?.cadena_critica || []" :key="c.paso">
+                  <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 relative pl-12 hover:border-slate-700 transition">
+                    <!-- Icono / Badge circular lateral -->
+                    <div class="absolute left-3 top-4 w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center font-bold text-xs font-mono"
+                         x-text="c.paso">
+                    </div>
+                    <div class="flex items-center justify-between gap-2">
+                      <h5 class="font-bold text-white text-sm" x-text="c.nombre"></h5>
+                      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-emerald-300 font-semibold" x-text="c.ventana"></span>
+                    </div>
+                    <p class="text-xs text-slate-300 mt-1 leading-relaxed" x-text="c.hito"></p>
+                    <div class="mt-2 pt-2 border-t border-slate-800/80 text-[11px] text-slate-400">
+                      Responsables: <strong class="text-slate-200" x-text="c.responsables"></strong>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+            </div>
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- DIAGRAMA C: FLUJO INDUSTRIAL Y CONVERGENCIA DE MATERIALES -->
+            <!-- --------------------------------------------------------------- -->
+            <div x-show="activeDiagramTab === 'flujo_industrial'" class="w-full flex justify-center">
+              <svg viewBox="0 0 980 720" class="w-full min-w-[820px] max-w-[960px] h-auto" role="img" aria-labelledby="diag-c-title diag-c-desc">
+                <title id="diag-c-title">Flujo Industrial y Convergencia de Materiales</title>
+                <desc id="diag-c-desc">Flujo de 5 etapas: Planificación, Mecanizado Primario, Herrería y Carpintería en paralelo, Horno 200°C y Ensamble Final.</desc>
+                <defs>
+                  <marker id="arr-flow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#38bdf8" />
+                  </marker>
+                  <marker id="arr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#10b981" />
+                  </marker>
+                  <marker id="arr-amber-flow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                    <polygon points="0 0, 8 3, 0 6" fill="#f59e0b" />
+                  </marker>
+                </defs>
+
+                <rect width="100%" height="100%" fill="#090d16" rx="12"/>
+
+                <!-- SUBGRAFO 1: DIRECCIÓN Y DISEÑO -->
+                <rect x="32" y="36" width="460" height="116" rx="8" fill="rgba(30,41,59,0.35)" stroke="rgba(56,189,248,0.3)" stroke-width="1"/>
+                <text x="44" y="52" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">1. DIRECCIÓN, PLANIFICACIÓN Y DISEÑO</text>
+                
+                <rect x="48" y="66" width="190" height="68" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <text x="58" y="90" fill="#f8fafc" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Gerencia Operaciones</text>
+                <text x="58" y="106" fill="#94a3b8" font-size="9" font-family="'Geist Mono', monospace">Eduardo Catalá</text>
+                <text x="58" y="120" fill="#64748b" font-size="9" font-family="'Geist', sans-serif">Prioridades y OP</text>
+
+                <rect x="280" y="66" width="196" height="68" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+                <text x="290" y="90" fill="#f8fafc" font-size="11" font-family="'Geist', sans-serif" font-weight="600">Diseño y Planos BOM</text>
+                <text x="290" y="106" fill="#38bdf8" font-size="9" font-family="'Geist Mono', monospace">José Javier Cardozo</text>
+                <text x="290" y="120" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Archivos CNC .dxf/.nc</text>
+
+                <path d="M 238,100 H 274" fill="none" stroke="#38bdf8" stroke-width="1.2" marker-end="url(#arr-flow)"/>
+
+                <!-- SUBGRAFO ALMACÉN -->
+                <rect x="524" y="36" width="424" height="116" rx="8" fill="rgba(30,41,59,0.35)" stroke="rgba(148,163,184,0.3)" stroke-width="1"/>
+                <text x="536" y="52" fill="#94a3b8" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">ABASTECIMIENTO Y ALMACÉN</text>
+
+                <rect x="540" y="66" width="392" height="68" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+                <text x="554" y="90" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Almacén de Materia Prima e Insumos</text>
+                <text x="554" y="108" fill="#cbd5e1" font-size="10" font-family="'Geist Mono', monospace">Láminas de acero · Tubos · Melamina · Polvo electrostático</text>
+                <text x="554" y="122" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Liberación sincronizada al pie de máquina según BOM</text>
+
+                <!-- SUBGRAFO 2: MECANIZADO PRIMARIO (FRANJA DORADA) -->
+                <rect x="32" y="184" width="916" height="128" rx="8" fill="rgba(6,78,59,0.25)" stroke="rgba(52,211,153,0.35)" stroke-width="1"/>
+                <text x="44" y="200" fill="#34d399" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">2. MECANIZADO PRIMARIO (ALTA DEPENDENCIA ELÉCTRICA — FRANJA DORADA 06:00–11:00 AM)</text>
+
+                <!-- Láser CNC -->
+                <rect x="56" y="216" width="260" height="76" rx="6" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="1.5"/>
+                <text x="68" y="240" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Corte Láser CNC</text>
+                <text x="68" y="256" fill="#34d399" font-size="10" font-family="'Geist Mono', monospace">Gabriel Méndez · 100% Franja Dorada</text>
+                <text x="68" y="272" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Láminas de acero calibradas</text>
+
+                <!-- Punzonadora -->
+                <rect x="356" y="216" width="260" height="76" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                <text x="368" y="240" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Punzonadora CNC / Manual</text>
+                <text x="368" y="256" fill="#fbbf24" font-size="10" font-family="'Geist Mono', monospace">Carlos Silva · Ventanas alternas</text>
+                <text x="368" y="272" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Perforado de bandejas y tapas</text>
+
+                <!-- Prensa Plegadora CNC -->
+                <rect x="656" y="216" width="268" height="76" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+                <text x="668" y="240" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Prensa Plegadora CNC</text>
+                <text x="668" y="256" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace">Doblado y Conformado Secuencial</text>
+                <text x="668" y="272" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Alimenta de piezas listas a Herrería</text>
+
+                <!-- SUBGRAFO 3: TRANSFORMACIÓN INTERMEDIA (PARALELO METAL - MADERA) -->
+                <rect x="32" y="344" width="916" height="120" rx="8" fill="rgba(120,53,15,0.25)" stroke="rgba(251,191,36,0.35)" stroke-width="1"/>
+                <text x="44" y="360" fill="#fbbf24" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">3. TRANSFORMACIÓN INTERMEDIA (LÍNEAS PARALELAS)</text>
+
+                <!-- Herrería -->
+                <rect x="56" y="374" width="420" height="72" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="68" y="398" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Herrería y Soldadura MIG</text>
+                <text x="68" y="414" fill="#fbbf24" font-size="10" font-family="'Geist Mono', monospace">Gustavo Méndez (Joan, Hermo, Renny)</text>
+                <text x="68" y="430" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Armado de chasis y estructuras metálicas</text>
+
+                <!-- Carpintería -->
+                <rect x="504" y="374" width="420" height="72" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.2"/>
+                <text x="516" y="398" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Carpintería y Modulares (NO entra al horno)</text>
+                <text x="516" y="414" fill="#38bdf8" font-size="10" font-family="'Geist Mono', monospace">Alí Torrealba / Wilfredo Bello (Contratistas)</text>
+                <text x="516" y="430" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Módulos de melamina y madera listos para ensamble</text>
+
+                <!-- SUBGRAFO 4: TERMINACIÓN (CUELLO DE BOTELLA) -->
+                <rect x="32" y="496" width="444" height="116" rx="8" fill="rgba(136,19,55,0.25)" stroke="rgba(251,113,133,0.35)" stroke-width="1"/>
+                <text x="44" y="512" fill="#fb7185" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">4. FASE TERMINACIÓN (CUELLO DE BOTELLA)</text>
+
+                <rect x="48" y="526" width="412" height="68" rx="6" fill="#0f172a" stroke="#fb7185" stroke-width="1.5"/>
+                <text x="60" y="550" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Pintura en Polvo &amp; Horno 200°C (QC Previo)</text>
+                <text x="60" y="566" fill="#fda4af" font-size="10" font-family="'Geist Mono', monospace">Julio Daniel / Barbara / Janeth / Neuro</text>
+                <text x="60" y="580" fill="#94a3b8" font-size="9" font-family="'Geist', sans-serif">Desengrase químico + Curado electrostático</text>
+
+                <!-- SUBGRAFO 5: INTEGRACIÓN Y SALIDA -->
+                <rect x="504" y="496" width="444" height="116" rx="8" fill="rgba(76,29,149,0.25)" stroke="rgba(192,132,252,0.35)" stroke-width="1"/>
+                <text x="516" y="512" fill="#c084fc" font-size="10" font-family="'Geist Mono', monospace" font-weight="600">5. INTEGRACIÓN, CALIDAD Y DESPACHO</text>
+
+                <rect x="520" y="526" width="412" height="68" rx="6" fill="#0f172a" stroke="#c084fc" stroke-width="1.5"/>
+                <text x="532" y="550" fill="#f8fafc" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Ensamble Final, Embalaje QC &amp; Despacho</text>
+                <text x="532" y="566" fill="#d8b4fe" font-size="10" font-family="'Geist Mono', monospace">Acople Metal + Melamina · Keyver / Marvin</text>
+                <text x="532" y="580" fill="#a7f3d0" font-size="9" font-family="'Geist', sans-serif">Salida de Tienda Completa = Bono Semanal</text>
+
+                <!-- Conexiones Ortogonales del Flujo -->
+                <path d="M 186,292 V 368" fill="none" stroke="#10b981" stroke-width="1.5" marker-end="url(#arr-green)"/>
+                <path d="M 486,292 V 330 H 266 V 368" fill="none" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#arr-amber-flow)"/>
+                <path d="M 790,292 V 330 H 360 V 368" fill="none" stroke="#38bdf8" stroke-width="1.2" marker-end="url(#arr-flow)"/>
+
+                <!-- Herrería -> Pintura -->
+                <path d="M 254,446 V 520" fill="none" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arr-amber-flow)"/>
+
+                <!-- Pintura -> Ensamble Final -->
+                <path d="M 460,560 H 514" fill="none" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arr-flow)"/>
+
+                <!-- Carpintería -> Ensamble Final (Convergencia) -->
+                <path d="M 714,446 V 520" fill="none" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arr-flow)"/>
+
+                <!-- Leyenda de Convergencia -->
+                <line x1="32" y1="648" x2="948" y2="648" stroke="rgba(51,65,85,0.6)" stroke-width="0.8"/>
+                <text x="32" y="668" fill="#10b981" font-size="10" font-family="'Geist', sans-serif" font-weight="600">✓ Punto Clave de Arquitectura:</text>
+                <text x="210" y="668" fill="#cbd5e1" font-size="10" font-family="'Geist', sans-serif">La melamina avanza en paralelo a Herrería y NO entra al horno de 200°C; ambas líneas convergen en Ensamble Final para la entrega de la Tienda Completa.</text>
+              </svg>
             </div>
 
           </div>
@@ -485,7 +869,44 @@
 
         <!-- Detalle Contextual según el Diagrama Activo -->
         
-        <!-- Puntos Clave Diagrama 3 -->
+        <!-- Puntos Clave Diagrama A -->
+        <div x-show="activeDiagramTab === 'telemetria'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-2">
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-sky-400 block mb-1">⚡ Telemetría de Red y Generador</strong>
+            <p class="text-slate-300 leading-relaxed">Monitoreo continuo de red comercial 220V/60Hz y del Generador Iveco (28 kW PRP / 92A) con horómetro y reserva de diésel.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-amber-400 block mb-1">📈 Motor de Ventanas Móviles Δ</strong>
+            <p class="text-slate-300 leading-relaxed">Cálculo de tendencias en ventanas de 7, 15 y 30 días para anticipar desplazamientos de horarios de corte.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-purple-400 block mb-1">🗄️ Persistencia Notion API</strong>
+            <p class="text-slate-300 leading-relaxed">6 Bases de datos maestras interconectadas que consolidan 62 eventos históricos en 18 semanas de observación.</p>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
+            <strong class="text-emerald-400 block mb-1">📱 Módulos Web y Reportes</strong>
+            <p class="text-slate-300 leading-relaxed">Tableros de semáforo en vivo, simulador interactivo de 2 máquinas y descarga directa de manuales técnicos.</p>
+          </div>
+        </div>
+
+        <!-- Puntos Clave Diagrama B -->
+        <div x-show="activeDiagramTab === 'cadena_critica'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+          <template x-for="c in data?.cadena_critica || []" :key="c.paso">
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2 hover:border-slate-700 transition">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-400 font-mono" x-text="c.paso_label"></span>
+                <span class="text-[10px] text-slate-400 font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800" x-text="c.ventana"></span>
+              </div>
+              <h5 class="font-bold text-white text-sm" x-text="c.nombre"></h5>
+              <p class="text-xs text-slate-300 leading-relaxed" x-text="c.hito"></p>
+              <div class="pt-1.5 border-t border-slate-800/80 text-[11px] text-slate-400">
+                Responsables: <strong class="text-slate-200" x-text="c.responsables"></strong>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Puntos Clave Diagrama C -->
         <div x-show="activeDiagramTab === 'flujo_industrial'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-2">
           <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800">
             <strong class="text-sky-400 block mb-1">📦 Abastecimiento y Almacén</strong>
@@ -503,23 +924,6 @@
             <strong class="text-purple-400 block mb-1">🪵 Ensamble Final e Integración</strong>
             <p class="text-slate-300 leading-relaxed">Carpintería no entra al horno (200°C); avanza en paralelo y converge con las piezas metálicas horneadas.</p>
           </div>
-        </div>
-
-        <!-- Tarjetas por Hitos Diagrama 2 -->
-        <div x-show="activeDiagramTab === 'cadena_critica'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
-          <template x-for="c in data?.cadena_critica || []" :key="c.paso">
-            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2 hover:border-slate-700 transition">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-emerald-400 font-mono" x-text="c.paso_label"></span>
-                <span class="text-[10px] text-slate-400 font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800" x-text="c.ventana"></span>
-              </div>
-              <h5 class="font-bold text-white text-sm" x-text="c.nombre"></h5>
-              <p class="text-xs text-slate-300 leading-relaxed" x-text="c.hito"></p>
-              <div class="pt-1.5 border-t border-slate-800/80 text-[11px] text-slate-400">
-                Responsables: <strong class="text-slate-200" x-text="c.responsables"></strong>
-              </div>
-            </div>
-          </template>
         </div>
 
       </div>

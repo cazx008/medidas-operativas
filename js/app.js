@@ -1,4 +1,4 @@
-// js/app.js — Lógica de reactividad, datos embebidos y renderizado vectorial para Sanesca
+// js/app.js — Lógica de reactividad, datos maestros embebidos y simulador para Sanesca
 
 // Datos maestros embebidos (Garantiza funcionamiento 100% tanto en GitHub Pages como en file:// local)
 const MASTER_CONCILIACION_DATA = {
@@ -449,9 +449,10 @@ document.addEventListener('alpine:init', () => {
     currentTimeStr: '',
     currentStatusFranja: '',
     
-    // Pestañas y filtros
-    activeDiagramTab: 'flujo_industrial',
+    // Pestañas de diagramas (3 diagramas vectoriales SVG puros)
+    activeDiagramTab: 'telemetria', // 'telemetria' (A), 'cadena_critica' (B), 'flujo_industrial' (C)
     diagramZoom: 1.0,
+    cadenaMobileView: false, // Selector para vista timeline en móvil
     
     // Simulador de concurrencia
     selectedMachine1: 'laser',
@@ -463,94 +464,6 @@ document.addEventListener('alpine:init', () => {
     // Modal QR
     qrModalOpen: false,
     currentQrForm: null,
-    
-    // Definiciones Mermaid (Código fuente limpio)
-    mermaidFlujoCode: `flowchart TD
-    subgraph S1 ["1. Dirección, Planificación y Diseño"]
-        DIR["Gerencia de Operaciones<br/><b>(Eduardo Catalá)</b>"]
-        ORD["Orden de Producción y Prioridades"]
-        DIS["Diseño, Planos y Despieces BOM<br/><b>(José Javier Cardozo)</b>"]
-        DIR --> ORD --> DIS
-    end
-
-    subgraph S_ALM ["Abastecimiento y Almacén"]
-        ALM["Almacén de Materia Prima e Insumos<br/><i>(Láminas de acero, Tubos, Melamina, Pintura)</i>"]
-    end
-
-    subgraph S2 ["2. Mecanizado Primario (Alta Dependencia Eléctrica — Franja Dorada)"]
-        PUNZ["Punzonado CNC / Manual<br/><b>(Carlos Silva)</b>"]
-        LASER["Corte Láser CNC<br/><b>(Gabriel Méndez)</b>"]
-        PLEG["Prensa Plegadora CNC<br/><i>(Conformado y Doblado)</i>"]
-    end
-
-    subgraph S3 ["3. Transformación Intermedia (Líneas Paralelas)"]
-        HERR["Herrería y Soldadura MIG<br/><b>(Gustavo Méndez - Joan, Hermo, Renny)</b>"]
-        CARP["Carpintería y Modulares<br/><b>(Alí Torrealba / Wilfredo Bello)</b>"]
-    end
-
-    subgraph S4 ["4. Fase Terminación (Cuello de Botella Crítico)"]
-        PREP["Preparación, Limpieza y Desengrase"]
-        PINT["Pintura Electrostática en Polvo y Horno 200°C<br/><b>(Julio Daniel / Barbara / Janeth / Neuro)</b>"]
-        PREP --> PINT
-    end
-
-    subgraph S5 ["5. Integración, Control de Calidad y Salida"]
-        ENS["Ensamble Final e Integración<br/><i>(Acople Estructura Metálica + Módulos de Madera)</i>"]
-        EMB["Embalaje y Verificación QC<br/><b>(Keyver Merchan / Yorvel)</b>"]
-        DESP["Despacho e Instalación en Tienda<br/><b>(Marvin / Arsenio - Contratistas)</b>"]
-        ENS -->|Mobiliario verificado| EMB -->|Producto protegido y flejado| DESP
-    end
-
-    %% Conexiones entre Fases
-    ORD -.->|Liberación de Materiales| ALM
-    DIS -->|Archivos CNC .dxf/.nc| LASER
-    DIS -->|Planos de punzonado| PUNZ
-    DIS -->|Planos de armado y soldadura| HERR
-    DIS -->|Planos de despiece y corte| CARP
-    DIS -.->|Ficha técnica y código de color| PINT
-
-    ALM -->|Láminas a punzonar| PUNZ
-    ALM -->|Láminas y perfiles de acero| LASER
-    ALM -->|Tableros melamina y herrajes| CARP
-
-    LASER -->|Piezas para plegar| PLEG
-    PUNZ -->|Piezas perforadas para plegar| PLEG
-    LASER -->|Piezas planas cortadas| HERR
-    PUNZ -->|Piezas punzonadas planas| HERR
-    PLEG -->|Piezas conformadas / plegadas| HERR
-
-    HERR -->|Estructuras armadas y soldadas| PREP
-    CARP -->|Módulos de madera / Melamina armada| ENS
-    PINT -->|Estructuras metálicas horneadas y frías| ENS
-
-    %% Estilos de Subgrafos
-    style S1 fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
-    style S_ALM fill:#0f172a,stroke:#94a3b8,stroke-width:2px,color:#f8fafc
-    style S2 fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc
-    style S3 fill:#78350f,stroke:#fbbf24,stroke-width:2px,color:#f8fafc
-    style S4 fill:#881337,stroke:#fb7185,stroke-width:2px,color:#f8fafc
-    style S5 fill:#4c1d95,stroke:#c084fc,stroke-width:2px,color:#f8fafc`,
-
-    mermaidCadenaCode: `flowchart LR
-    P0["<b>Paso 0: Diseño y Planos</b><br/><span style='font-size:12px;color:#38bdf8;'>Viernes 03:00 PM</span><br/><span style='font-size:11px;color:#94a3b8;'>Javier Cardozo / Eduardo</span>"]
-    P1["<b>Paso 1: Corte y Plegado CNC</b><br/><span style='font-size:12px;color:#34d399;'>Lun-Mié 06:00–10:30 AM</span><br/><span style='font-size:11px;color:#94a3b8;'>Gabriel / Carlos / Plegador</span>"]
-    P2["<b>Paso 2: Ensamble Herrería/Carp.</b><br/><span style='font-size:12px;color:#fbbf24;'>Lunes a Jueves</span><br/><span style='font-size:11px;color:#94a3b8;'>Gustavo / Alí / Wilfredo</span>"]
-    P3["<b>Paso 3: Pintura y Horno 200°C</b><br/><span style='font-size:12px;color:#fb7185;'>Miércoles y Jueves</span><br/><span style='font-size:11px;color:#94a3b8;'>Julio Daniel / Barbara / Neuro</span>"]
-    P3b["<b>Paso 3.5: Embalaje y QC</b><br/><span style='font-size:12px;color:#c084fc;'>Jueves y Viernes</span><br/><span style='font-size:11px;color:#94a3b8;'>Keyver / Yorvel</span>"]
-    P4["<b>Paso 4: Tienda Completa</b><br/><span style='font-size:12px;color:#4ade80;'>Viernes Cierre</span><br/><span style='font-size:11px;color:#94a3b8;'>Despacho e Instalación</span>"]
-
-    P0 ==>|Planos listos| P1
-    P1 ==>|Piezas conformadas| P2
-    P2 ==>|Estructuras listas| P3
-    P3 ==>|Piezas horneadas| P3b
-    P3b ==>|Libera Bono Semanal| P4
-
-    style P0 fill:#1e293b,stroke:#38bdf8,stroke-width:2.5px,color:#f8fafc
-    style P1 fill:#064e3b,stroke:#34d399,stroke-width:2.5px,color:#f8fafc
-    style P2 fill:#78350f,stroke:#fbbf24,stroke-width:2.5px,color:#f8fafc
-    style P3 fill:#881337,stroke:#fb7185,stroke-width:2.5px,color:#f8fafc
-    style P3b fill:#581c87,stroke:#c084fc,stroke-width:2.5px,color:#f8fafc
-    style P4 fill:#14532d,stroke:#4ade80,stroke-width:3.5px,color:#f8fafc`,
 
     async init() {
       // Intentar actualizar desde JSON si está en un servidor HTTP, sino usa MASTER_CONCILIACION_DATA directo
@@ -572,7 +485,6 @@ document.addEventListener('alpine:init', () => {
       
       this.$nextTick(() => {
         this.initChart();
-        this.renderMermaidDiagrams();
       });
     },
     
@@ -593,60 +505,6 @@ document.addEventListener('alpine:init', () => {
         this.currentStatusFranja = 'riesgo';
       } else {
         this.currentStatusFranja = 'recuperacion';
-      }
-    },
-    
-    async renderMermaidDiagrams() {
-      if (!window.mermaid) return;
-      
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'dark',
-        securityLevel: 'loose',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        themeVariables: {
-          darkMode: true,
-          background: '#090d16',
-          primaryColor: '#1e293b',
-          primaryTextColor: '#f8fafc',
-          primaryBorderColor: '#38bdf8',
-          lineColor: '#64748b',
-          secondaryColor: '#0f172a',
-          tertiaryColor: '#1e293b',
-          fontSize: '14px'
-        }
-      });
-      
-      try {
-        const flujoContainer = document.getElementById('mermaid-flujo-target');
-        if (flujoContainer) {
-          const { svg } = await mermaid.render('mermaid_flujo_svg', this.mermaidFlujoCode);
-          flujoContainer.innerHTML = svg;
-          const svgEl = flujoContainer.querySelector('svg');
-          if (svgEl) {
-            svgEl.style.width = '100%';
-            svgEl.style.minWidth = '920px';
-            svgEl.style.height = 'auto';
-          }
-        }
-      } catch (err) {
-        console.error('Error renderizando Diagrama 3:', err);
-      }
-
-      try {
-        const cadenaContainer = document.getElementById('mermaid-cadena-target');
-        if (cadenaContainer) {
-          const { svg } = await mermaid.render('mermaid_cadena_svg', this.mermaidCadenaCode);
-          cadenaContainer.innerHTML = svg;
-          const svgEl = cadenaContainer.querySelector('svg');
-          if (svgEl) {
-            svgEl.style.width = '100%';
-            svgEl.style.minWidth = '850px';
-            svgEl.style.height = 'auto';
-          }
-        }
-      } catch (err) {
-        console.error('Error renderizando Diagrama 2:', err);
       }
     },
     
