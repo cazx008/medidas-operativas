@@ -85,15 +85,15 @@
   <!-- ========================================================================= -->
   <!-- ZONA 0: HEADER Y NAVEGACIÓN UNIFICADA (STICKY TOP CON LOGO MEJORADO) -->
   <!-- ========================================================================= -->
-  <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 sticky top-0 z-40 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 py-2.5 sm:px-6 flex items-center justify-between border-b border-slate-800/60">
+  <header class="bg-surface/95 backdrop-blur border-b border-borderSubtle sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 sm:px-6 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <!-- Placa de Alto Contraste para el Logo de Sanesca -->
-        <div class="logo-contrast-plate px-2 py-1 rounded-lg flex items-center justify-center transition hover:scale-105">
+        <div class="logo-contrast-plate px-2 py-1 rounded-lg flex items-center justify-center">
           <img src="assets/logo-sanesca.png" alt="Sanesca Exhibidores" class="h-6 sm:h-7 w-auto object-contain" onerror="this.style.display='none'">
         </div>
         <div>
-          <h1 class="text-white font-extrabold text-base sm:text-lg tracking-tight flex items-center gap-2">
+          <h1 class="text-white font-bold text-base sm:text-lg tracking-tight flex items-center gap-2">
             <span>🏭 Medidas Operativas</span>
             <span class="hidden sm:inline-block text-[11px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">v2.0 DocSemVer</span>
           </h1>
@@ -101,31 +101,33 @@
         </div>
       </div>
       
-      <!-- Navegación Cruzada hacia sanesca-dashboard y Descarga PDF -->
+      <!-- Navegación Cruzada (Ecosistema Sanesca) + Descarga PDF -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <a href="https://cazx008.github.io/sanesca-dashboard/" target="_blank"
-           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 transition shadow-sm">
-          <span>⚡ Monitoreo en Vivo</span>
-          <span class="text-xs font-mono">↗</span>
+        <a href="https://cazx008.github.io/inventario-dashboard/"
+           class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-slate-200 hover:bg-surfaceHigh transition border border-transparent hover:border-borderSubtle">
+          📦 Inventario ↗
+        </a>
+        <a href="https://cazx008.github.io/sanesca-dashboard/"
+           class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-slate-200 hover:bg-surfaceHigh transition border border-transparent hover:border-borderSubtle">
+          ⚡ Cortes Eléctricos ↗
         </a>
         <a href="assets/Documento_Marco_Conciliacion_Sanesca.pdf" download="Documento_Marco_Conciliacion_Sanesca.pdf"
-           class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm"
+           class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg text-slate-300 hover:text-white bg-surfaceHigh hover:bg-surfaceHighest border border-borderSubtle transition"
            title="Descargar documento marco oficial en formato PDF">
-          <span>📄 Descargar PDF</span>
-          <span class="text-xs font-bold font-mono">⤓</span>
+          📄 PDF ⤓
         </a>
       </div>
     </div>
 
     <!-- Sub-barra de Navegación Rápida a Secciones -->
-    <div class="max-w-7xl mx-auto px-4 py-1.5 overflow-x-auto custom-scrollbar flex items-center gap-1.5 text-xs whitespace-nowrap">
-      <a href="#principios" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">🎯 Principios</a>
-      <a href="#estadistica" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">📊 Diagnóstico & Semáforo</a>
-      <a href="#concurrencia" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">⚙️ Concurrencia de Máquinas</a>
-      <a href="#cadena" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">🔗 Cadena Crítica & Flujo</a>
-      <a href="#pacto" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">🤝 Corresponsabilidad</a>
-      <a href="#formularios" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">📱 Hub de Formularios</a>
-      <a href="#glosario" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition font-medium">📖 Glosario</a>
+    <div class="max-w-7xl mx-auto px-4 py-1.5 overflow-x-auto custom-scrollbar flex items-center gap-1.5 text-xs whitespace-nowrap border-t border-borderSubtle/50">
+      <a href="#principios" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">🎯 Principios</a>
+      <a href="#estadistica" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">📊 Diagnóstico & Semáforo</a>
+      <a href="#concurrencia" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">⚙️ Concurrencia de Máquinas</a>
+      <a href="#cadena" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">🔗 Cadena Crítica & Flujo</a>
+      <a href="#pacto" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">🤝 Corresponsabilidad</a>
+      <a href="#formularios" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">📱 Hub de Formularios</a>
+      <a href="#glosario" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white hover:bg-surfaceHigh transition font-medium">📖 Glosario</a>
     </div>
   </header>
 
